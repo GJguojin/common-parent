@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.gj.test.user.dao.UserDao">
+	<resultMap id="UserMap" type="com.gj.test.user.beans.User">
+		<result property="id" jdbcType="BIGINT" column="id"/> <!--  id -->
+		<result property="userName" jdbcType="VARCHAR" column="user_name"/> <!--  userName -->
+		<result property="userBirth" jdbcType="DATE" column="user_birth"/> <!--  userBirth -->
+		<result property="userEmail" jdbcType="VARCHAR" column="user_email"/> <!--  userEmail -->
+	</resultMap>
+	<sql id="BaseColumn">
+		id,
+		user_name,
+		user_birth,
+		user_email
+	</sql>
+	<select id="selectById" parameterType="java.lang.Long" resultMap="UserMap">
+		SELECT 
+			<include refid="BaseColumn" />
+		FROM t_user 
+		WHERE 
+			id = #{id} 
+	</select>
+
+	<!-- 按Id删除 -->
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM t_user WHERE
+		id = #{id} 
+	</delete>
+	 <!-- 插入 -->
+	<insert id="insert" parameterType="com.gj.test.user.beans.User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user (
+			id,
+			user_name,
+			user_birth,
+			user_email
+		) VALUES (
+			#{id,jdbcType=BIGINT},
+			#{userName,jdbcType=VARCHAR},
+			#{userBirth,jdbcType=DATE},
+			#{userEmail,jdbcType=VARCHAR}
+		)
+		
+	</insert>
+	
+	<select id="selectBySearch" parameterType="UserSearch" resultMap="UserMap">
+		SELECT 
+			<include refid="BaseColumn" />
+		FROM t_user
+		<where>
+			<if test="id!=null and id!=''">
+				and id = #{id}
+			</if>
+			<if test="userName!=null and userName!=''">
+				and user_name = #{userName}
+			</if>
+			<if test="userBirth!=null and userBirth!=''">
+				and user_birth = #{userBirth}
+			</if>
+			<if test="userEmail!=null and userEmail!=''">
+				and user_email = #{userEmail}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="com.gj.test.user.beans.User">
+		UPDATE t_user 
+			<set>
+				<if test="userName!=null and userName!=''">
+				user_name = #{userName,jdbcType=VARCHAR},
+				</if>
+				<if test="userBirth!=null and userBirth!=''">
+				user_birth = #{userBirth,jdbcType=DATE},
+				</if>
+				<if test="userEmail!=null and userEmail!=''">
+				user_email = #{userEmail,jdbcType=VARCHAR}
+				</if>
+			</set>
+		WHERE 
+			id = #{id,jdbcType=BIGINT}
+	</update>
+	
+</mapper>
