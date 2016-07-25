@@ -14,7 +14,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<webapp.port>80</webapp.port>
+		<webapp.port>8080</webapp.port>
 		<webapp.path>/</webapp.path>
 	</properties>
 
@@ -24,6 +24,7 @@
 			<artifactId>common-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>

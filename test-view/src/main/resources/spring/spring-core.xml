@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
@@ -11,7 +10,7 @@
 
 	<!-- 自动扫描dao和service包(自动注入) -->
 	<context:component-scan base-package="com.gj.test.*.dao.*" />
-	<context:component-scan base-package="com.gj.test.*.service.*" /> 
+	<context:component-scan base-package="com.gj.test.*.service.*" />
 
 	<!-- 加载service,此时要排除要controller,因为controller已经spring-mvc中加载过了 -->
 	<context:component-scan base-package="com.gj.test.*">
@@ -22,11 +21,22 @@
 		<property name="locations">
 			<list>
 				<value>classpath:config/jdbc.properties</value>
+				<value>classpath:config/cas.properties</value>
 			</list>
 		</property>
 	</bean>
-	
-	                                   
+
+	<bean class="com.gj.test.base.util.PropertyUtils">
+		<property name="locations">
+			<list>
+				<value>classpath:config/cas.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+
 	<bean id="pageInterceptor" class="com.gj.test.base.paginator.mybatis.PageInterceptor">
 		<property name="dialectClass" value="com.gj.test.base.paginator.mybatis.MySQLDialect" />
 	</bean>
@@ -79,7 +89,7 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.gj.test.*.dao" />
 	</bean>
-	
+
 
 
 	<!-- 开启AOP监听 只对当前配置文件有效 -->
@@ -121,4 +131,7 @@
 		<aop:pointcut id="txPointcut" expression="execution(* com.gj.test.*.service..impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
 	</aop:config>
+
+	<import resource="spring-shiro.xml" />
+
 </beans>
