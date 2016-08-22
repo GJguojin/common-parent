@@ -62,7 +62,7 @@
                 /cas = casFilter  
                 /admin/** = roles[ROLE_USER]  
                 /logout = logout
-                /user/** = roles[ROLE_USER]  
+               <!--  /user/** = roles[ROLE_USER]   -->
                 /** = anon  
             </value>  
         </property>  
